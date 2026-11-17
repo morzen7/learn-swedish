@@ -6,6 +6,8 @@ Helyben futó, Anki-szerű gyakorló app svéd igékhez és melléknevekhez. Nin
 
 Kattints duplán az `index.html` fájlra, és megnyílik a böngészőben (Safari, Chrome vagy Firefox).
 
+Vagy kattints duplán a **Svéd ragozás** ikonra (`Svéd ragozás.app`) a mappában. A Dockba is áthúzhatod, onnan egy kattintással indul. Ha az első indításkor a macOS figyelmeztet, kattints rá jobb gombbal, majd **Megnyitás**.
+
 ## Hogyan működik
 
 - Az app véletlenszerűen ad egy szót a **magyar jelentésével** és az **alapformájával** (igéknél az infinitiv, mellékneveknél az en-alak).

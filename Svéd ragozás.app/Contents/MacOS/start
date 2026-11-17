@@ -1,0 +1,4 @@
+#!/bin/bash
+# Megnyitja a gyakorlót az alapértelmezett böngészőben.
+DIR="$(cd "$(dirname "$0")/../../.." && pwd)"
+open "$DIR/index.html"
