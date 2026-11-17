@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Svéd ragozás – gyakorló</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand"><span class="flag" aria-hidden="true"></span>Svéd ragozás</div>
+  <nav class="tabs" role="tablist">
+    <button class="tab active" data-tab="practice" role="tab">Gyakorlás</button>
+    <button class="tab" data-tab="words" role="tab">Szavak</button>
+    <button class="tab" data-tab="import" role="tab">Import</button>
+    <button class="tab" data-tab="stats" role="tab">Haladás</button>
+  </nav>
+</header>
+
+<main>
+  <!-- GYAKORLÁS -->
+  <section id="tab-practice" class="panel active">
+    <div class="filters">
+      <label class="chip"><input type="checkbox" id="f-stark" checked> Starka verb</label>
+      <label class="chip"><input type="checkbox" id="f-oregel" checked> Oregelbundna verb</label>
+      <label class="chip"><input type="checkbox" id="f-ovrig" checked> Egyéb igék</label>
+      <label class="chip"><input type="checkbox" id="f-adj" checked> Melléknevek</label>
+    </div>
+
+    <div class="card" id="card">
+      <div class="card-head">
+        <span class="kind" id="c-kind"></span>
+        <span class="level" id="c-level"></span>
+      </div>
+      <div class="meaning" id="c-meaning"></div>
+      <div class="prompt" id="c-prompt"></div>
+      <form id="c-form" autocomplete="off" spellcheck="false">
+        <div class="fields" id="c-fields"></div>
+        <div class="letters" aria-label="Svéd betűk">
+          <button type="button" class="letter" data-l="å">å</button>
+          <button type="button" class="letter" data-l="ä">ä</button>
+          <button type="button" class="letter" data-l="ö">ö</button>
+          <span class="hint">vagy a mezőben: <kbd>a:</kbd> → ä, <kbd>o:</kbd> → ö, <kbd>aa</kbd> → å</span>
+        </div>
+        <div class="actions">
+          <button type="button" class="ghost" id="c-skip">Kihagyom</button>
+          <button type="submit" class="primary" id="c-submit">Ellenőrzés <kbd>Enter</kbd></button>
+        </div>
+      </form>
+      <div class="feedback" id="c-feedback" hidden></div>
+    </div>
+    <p class="session" id="session"></p>
+  </section>
+
+  <!-- SZAVAK -->
+  <section id="tab-words" class="panel">
+    <div class="row">
+      <input type="search" id="w-search" placeholder="Keresés svédül vagy magyarul…">
+      <select id="w-filter">
+        <option value="all">Mind</option>
+        <option value="verb">Igék</option>
+        <option value="adj">Melléknevek</option>
+        <option value="custom">Csak saját</option>
+      </select>
+    </div>
+    <div class="tablewrap"><table id="w-table"></table></div>
+  </section>
+
+  <!-- IMPORT -->
+  <section id="tab-import" class="panel">
+    <h2>Új szavak importálása</h2>
+    <p>Soronként egy szó, a mezőket <b>pontosvessző</b> vagy <b>tabulátor</b> választja el. Ha egy alak nem létezik, írj <code>—</code> vagy <code>-</code> jelet; több helyes alakot perjellel adj meg (<code>sa/sade</code>).</p>
+    <pre class="fmt">ige; infinitiv; imperativ; presens; preteritum; supinum; magyar jelentés
+mn;  en-alak; ett-alak; plural; komparativ; superlativ; superlativ best.; magyar jelentés</pre>
+    <p class="muted">Ige soroknál a csoportot is megadhatod 8. mezőként (<code>stark</code>, <code>oregelbunden</code> vagy <code>övrig</code>, alapértelmezés: <code>övrig</code>). Ha egy szó már szerepel, a régi adat felülíródik, a haladás megmarad.</p>
+    <textarea id="i-text" rows="10" placeholder="ige; tala; tala; talar; talade; talat; beszél
+mn; varm; varmt; varma; varmare; varmast; varmaste; meleg"></textarea>
+    <div class="actions left">
+      <button class="primary" id="i-preview">Előnézet</button>
+      <button class="ghost" id="i-example">Példa beillesztése</button>
+    </div>
+    <div id="i-result"></div>
+
+    <h3>Ha csak az alapformákat tudod</h3>
+    <p>Küldd el Claude-nak a svéd alapformákat, és kérd, hogy adja vissza őket ebben az import formátumban, a ragozással és a magyar jelentéssel együtt. A kapott sorokat ide illeszd be.</p>
+    <p class="muted">Másik lehetőség: a <code>data/words.js</code> fájlba közvetlenül is felveheted a szavakat.</p>
+  </section>
+
+  <!-- HALADÁS -->
+  <section id="tab-stats" class="panel">
+    <div id="s-summary" class="stats"></div>
+    <h3>Szintek</h3>
+    <p class="muted">Minden szó 0–6 szinten áll. Ha egy szó minden alakját jól írod be, egy szinttel feljebb lép, ha hibázol, visszaesik, és pár kártya múlva újra előjön. Az alacsony szintű szavak gyakrabban jönnek elő. <b>3. szinttől</b> az alapforma már nem látszik, csak a magyar jelentés: azt is neked kell beírnod.</p>
+    <div id="s-levels" class="levels"></div>
+    <h3>Legtöbbet rontott szavak</h3>
+    <div id="s-hard"></div>
+    <h3>Mentés</h3>
+    <p class="muted">A haladás ebben a böngészőben tárolódik. Időnként érdemes menteni egy fájlba, hogy ne vesszen el, vagy másik gépre vihesd.</p>
+    <div class="actions left">
+      <button class="primary" id="b-export">Mentés fájlba</button>
+      <label class="ghost filebtn">Visszatöltés fájlból<input type="file" id="b-import" accept=".json,application/json" hidden></label>
+      <button class="danger" id="b-reset">Haladás nullázása</button>
+    </div>
+  </section>
+</main>
+
+<script src="data/words.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
